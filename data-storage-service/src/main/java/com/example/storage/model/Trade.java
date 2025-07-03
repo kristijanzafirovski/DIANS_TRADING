@@ -1,33 +1,38 @@
 package com.example.storage.model;
 
-import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
-import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 
 @Table("trades")
 public class Trade {
-    @PrimaryKeyColumn(name = "symbol", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-    private String symbol;
 
-    @PrimaryKeyColumn(name = "timestamp", ordinal = 1, type = PrimaryKeyType.CLUSTERED)
-    private long timestamp;
+    @PrimaryKey
+    private TradeKey key;
 
     private double price;
 
+    // no-args constructor required by Cassandra mapping
     public Trade() {}
 
-    public Trade(String symbol, long timestamp, double price) {
-        this.symbol = symbol;
-        this.timestamp = timestamp;
+    // the constructor you need
+    public Trade(TradeKey key, double price) {
+        this.key = key;
         this.price = price;
     }
 
-    public String getSymbol() { return symbol; }
-    public void setSymbol(String symbol) { this.symbol = symbol; }
+    public TradeKey getKey() {
+        return key;
+    }
 
-    public long getTimestamp() { return timestamp; }
-    public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
+    public void setKey(TradeKey key) {
+        this.key = key;
+    }
 
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }

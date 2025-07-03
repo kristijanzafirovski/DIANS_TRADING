@@ -61,26 +61,22 @@ services:
       timeout: 5s
       retries: 5
 
-  data-ingestion-service:
-    build: 
-        context: .
-        dockerfile: data-ingestion-service/Dockerfile
+  data-storage-service:
+    build:
+      context: .
+      dockerfile: data-storage-service/Dockerfile
     ports:
-      - "3001:3000"
+      - "8000:8000"
     depends_on:
+      postgres:
+        condition: service_healthy
       cassandra:
-          condition: service_healthy
+        condition: service_healthy
       kafka:
         condition: service_started
 
-    environment:
-      SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra
-      SPRING_DATA_CASSANDRA_PORT: 9042
-      SPRING_DATA_CASSANDRA_KEYSPACE_NAME: trading
-      SPRING_DATA_CASSANDRA_SCHEMA_ACTION: CREATE_IF_NOT_EXISTS
-      SPRING_DATA_CASSANDRA_LOCAL_DATACENTER: datacenter1
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
+
+
 
   real-time-processing-service:
     build: 
@@ -91,19 +87,6 @@ services:
         condition: service_healthy
 
 
-  data-storage-service:
-    build: 
-        context: .
-        dockerfile: data-storage-service/Dockerfile
-    ports:
-      - "8000:8000"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      cassandra:
-        condition: service_healthy
-      kafka:
-        condition: service_started
 
   data-analysis-service:
     build: 
@@ -123,3 +106,25 @@ services:
     depends_on:
       - data-analysis-service
       - data-storage-service
+
+  data-ingestion-service:
+    build:
+      context: .
+      dockerfile: data-ingestion-service/Dockerfile
+    ports:
+      - "3001:3000"
+    depends_on:
+      cassandra:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+
+    environment:
+      SPRING_DATA_CASSANDRA_CONTACT_POINTS: cassandra
+      SPRING_DATA_CASSANDRA_PORT: 9042
+      SPRING_DATA_CASSANDRA_KEYSPACE_NAME: trading
+      SPRING_DATA_CASSANDRA_SCHEMA_ACTION: CREATE_IF_NOT_EXISTS
+      SPRING_DATA_CASSANDRA_LOCAL_DATACENTER: datacenter1
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+

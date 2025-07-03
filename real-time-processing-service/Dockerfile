@@ -1,4 +1,4 @@
-FROM maven:3-openjdk-17 AS build
+FROM maven:3-openjdk-17 AS builder
 WORKDIR /app
 
 COPY . .
@@ -8,10 +8,16 @@ RUN mvn clean package \
     -am \
     -DskipTests
 
-FROM openjdk:17-slim
-WORKDIR /app
-COPY --from=build \
-    /app/real-time-processing-service/target/real-time-processing-service-*.jar \
-    ./app.jar
+FROM bitnami/spark:3.4.1
 
-ENTRYPOINT ["java","-jar","app.jar"]
+WORKDIR /opt/app
+
+COPY --from=builder \
+     /app/real-time-processing-service/target/real-time-processing-service-*.jar \
+     ./app.jar
+
+ENTRYPOINT ["spark-submit", \
+    "--class", "com.example.processing.SparkProcessingApp", \
+    "--master", "local[*]", \
+    "--deploy-mode", "client", \
+    "/opt/app/app.jar"]
