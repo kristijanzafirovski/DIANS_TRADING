@@ -1,0 +1,43 @@
+# Dockerfile.build
+#########################################
+# 1) Build all modules in one go
+#########################################
+FROM maven:3-openjdk-17 AS build
+WORKDIR /app
+
+# Copy the parent POM and every submodule
+COPY pom.xml .
+COPY data-storage-service    ./data-storage-service
+COPY data-ingestion-service  ./data-ingestion-service
+COPY real-time-processing-service ./real-time-processing-service
+COPY data-analysis-service   ./data-analysis-service
+
+# Run the full reactor build (installs snapshots into the Maven repo)
+RUN mvn clean package -DskipTests
+
+#########################################
+# 2) Trim down into four skinny images
+#########################################
+# Storage service image
+FROM eclipse-temurin:17-jre-focal AS storage
+WORKDIR /app
+COPY --from=build /app/data-storage-service/target/data-storage-service-*.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
+
+# Ingestion service image
+FROM eclipse-temurin:17-jre-focal AS ingestion
+WORKDIR /app
+COPY --from=build /app/data-ingestion-service/target/data-ingestion-service-*.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
+
+# Real-time processing service image
+FROM eclipse-temurin:17-jre-focal AS realtime
+WORKDIR /app
+COPY --from=build /app/real-time-processing-service/target/real-time-processing-service-*.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
+
+# Analysis service image
+FROM eclipse-temurin:17-jre-focal AS analysis
+WORKDIR /app
+COPY --from=build /app/data-analysis-service/target/data-analysis-service-*.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
