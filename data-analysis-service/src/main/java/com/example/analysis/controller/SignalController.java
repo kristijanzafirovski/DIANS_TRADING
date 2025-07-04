@@ -1,24 +1,23 @@
 package com.example.analysis.controller;
 
+import com.example.analysis.listener.ProcessedDataListener;
 import com.example.analysis.model.Signal;
-import com.example.analysis.repository.SignalRepository;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/signals")
 public class SignalController {
-    private final SignalRepository repo;
 
-    public SignalController(SignalRepository repo) {
-        this.repo = repo;
+    private final ProcessedDataListener listener;
+
+    public SignalController(ProcessedDataListener listener) {
+        this.listener = listener;
     }
 
-    @GetMapping("/{symbol}")
-    public List<Signal> getLatest(@PathVariable String symbol,
-                                  @RequestParam(defaultValue="10") int limit) {
-        return repo.findBySymbolOrderByTimestampDesc(symbol)
-                .stream().limit(limit).toList();
+    @GetMapping("/signals")
+    public List<Signal> getSignals() {
+        return listener.getSignals();
     }
 }

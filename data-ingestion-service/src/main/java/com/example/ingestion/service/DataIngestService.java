@@ -91,7 +91,8 @@ public class DataIngestService {
                     "data", data
             );
             String json = objectMapper.writeValueAsString(msg);
-            kafkaTemplate.send("raw-data", symbol, json);
+            kafkaTemplate.send("trades", symbol, json);
+            log.info("Sent raw data");
         } catch (Exception e) {
             log.error("Failed to send message", e);
         }
