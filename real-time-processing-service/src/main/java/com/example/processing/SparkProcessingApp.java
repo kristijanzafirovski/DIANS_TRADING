@@ -2,6 +2,7 @@ package com.example.processing;
 
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.streaming.StreamingQuery;
+import org.apache.spark.sql.types.StructType;
 
 import static org.apache.spark.sql.functions.*;
 
@@ -17,6 +18,8 @@ public class SparkProcessingApp {
                 .format("kafka")
                 .option("kafka.bootstrap.servers", "kafka:9092")
                 .option("subscribe", "trades")
+                .option("startingOffsets",  "earliest")
+                .option("failOnDataLoss",     "false")
                 .load()
                 .selectExpr("CAST(value AS STRING) as json_str")
                 .as(Encoders.STRING());

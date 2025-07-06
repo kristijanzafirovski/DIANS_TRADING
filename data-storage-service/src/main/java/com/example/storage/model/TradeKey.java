@@ -22,6 +22,9 @@ public class TradeKey implements Serializable {
         this.timestamp = timestamp;
     }
 
+    public TradeKey(String ticker) {
+    }
+
     public long getTimestamp() {
         return timestamp;
     }

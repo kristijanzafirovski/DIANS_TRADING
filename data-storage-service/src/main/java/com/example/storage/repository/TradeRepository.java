@@ -17,4 +17,7 @@ public interface TradeRepository extends CassandraRepository<Trade, TradeKey> {
 
     @Query("SELECT COUNT(*) FROM trades WHERE symbol = ?0")
     long countBySymbol(String symbol);
+
+    @Query("SELECT symbol FROM trades WHERE symbol = ?0")
+    List<Trade> findBySymbol(String symbol);
 }

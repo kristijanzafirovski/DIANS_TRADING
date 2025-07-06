@@ -1,4 +1,4 @@
-package com.example.ingestion;
+package com.example.ingestion.config;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
