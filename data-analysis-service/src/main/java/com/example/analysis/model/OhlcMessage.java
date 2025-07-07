@@ -3,7 +3,7 @@ package com.example.analysis.model;
 public class OhlcMessage {
     private String symbol;
     private String timestamp;
-    private Ohlc data;
+    private BarData data;
     // getters & setters…
 
     public String getSymbol() {
@@ -22,11 +22,13 @@ public class OhlcMessage {
         this.timestamp = timestamp;
     }
 
-    public Ohlc getData() {
+    public BarData getData() {
         return data;
     }
 
-    public void setData(Ohlc data) {
+    public void setData(BarData data) {
         this.data = data;
     }
+
+
 }

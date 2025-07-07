@@ -48,6 +48,7 @@ services:
         cqlsh cassandra 9042 -e \"CREATE TABLE IF NOT EXISTS trading.data (symbol text, timestamp bigint, price double, PRIMARY KEY(symbol, timestamp));\"
       "
 
+
   postgres:
     image: postgres:13
     environment:
@@ -61,6 +62,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
 
   data-storage-service:
     build:
@@ -76,9 +78,6 @@ services:
       kafka:
         condition: service_started
 
-
-
-
   real-time-processing-service:
     build: 
         context: .
@@ -86,8 +85,6 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
-
-
 
   data-analysis-service:
     build: 

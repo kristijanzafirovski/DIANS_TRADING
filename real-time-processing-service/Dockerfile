@@ -24,6 +24,9 @@ ENV HOME=/opt/app
 ENV HADOOP_USER_NAME=root
 ENV SPARK_CONF_DIR=/opt/app/conf
 
+COPY real-time-processing-service/src/main/resources/log4j.properties \
+     /opt/app/conf/log4j.properties
+
 WORKDIR /opt/app
 
 RUN rm -f /opt/bitnami/spark/jars/spark-sql-kafka-0-10_*.jar /opt/bitnami/spark/jars/spark-token-provider-kafka-0-10_*.jar

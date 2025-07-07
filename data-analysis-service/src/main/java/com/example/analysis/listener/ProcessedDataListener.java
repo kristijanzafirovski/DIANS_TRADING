@@ -29,7 +29,6 @@ public class ProcessedDataListener {
             Signal sig = service.generateSignal(msg);
             repository.save(sig);
         } catch (Exception e) {
-            // log & skip
             System.err.println("Failed to handle record: " + record.value());
             e.printStackTrace();
         }
