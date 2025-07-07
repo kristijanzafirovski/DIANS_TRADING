@@ -4,7 +4,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY static/ ./static
 COPY vite.config.js ./
-RUN npm run build      # this will compile static/index.html → dist/
+RUN npm run build
 
 FROM nginx:alpine
 COPY default.conf /etc/nginx/conf.d/default.conf

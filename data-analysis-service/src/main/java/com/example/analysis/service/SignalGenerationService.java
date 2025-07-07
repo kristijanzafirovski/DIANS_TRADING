@@ -5,12 +5,15 @@ import com.example.analysis.model.Signal;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Deque;
 import java.util.LinkedList;
 
 @Service
 public class SignalGenerationService {
+    private static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     private static final int SHORT_WINDOW_SIZE = 5;
     private static final int LONG_WINDOW_SIZE  = 30;
@@ -43,8 +46,8 @@ public class SignalGenerationService {
                 : "HOLD";
 
         // 5) parse your ISO‐timestamp into epoch millis
-        long ts = Instant.from(DateTimeFormatter.ISO_LOCAL_DATE_TIME.parse(msg.getTimestamp()))
-                .toEpochMilli();
+        LocalDateTime ldt = LocalDateTime.parse(msg.getTimestamp(), fmt);
+        long ts = ldt.toInstant(ZoneOffset.UTC).toEpochMilli();
 
         return new Signal(
                 msg.getSymbol(),

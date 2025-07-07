@@ -30,6 +30,8 @@ public class SignalController {
     @GetMapping("/symbol/{ticker}")
     public List<Signal> getSignalsByTicker(@PathVariable("ticker")String ticker){
         log.info("Get signals by ticker: {}", ticker);
+        log.info("Found {} signals", repository.findByKeySymbol(ticker).size());
+        log.info(repository.findByKeySymbol(ticker).toString());
         return repository.findByKeySymbol(ticker);
 
     }

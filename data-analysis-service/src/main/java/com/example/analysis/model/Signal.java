@@ -10,10 +10,10 @@ public class Signal {
     @PrimaryKey
     private SignalKey key;
 
-    @Column("shortMa")
+    @Column("shortma")
     private double shortMa;
 
-    @Column("longMa")
+    @Column("longma")
     private double longMa;
 
     @Column("signal")

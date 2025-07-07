@@ -10,6 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SignalRepository extends CassandraRepository<Signal, SignalKey> {
-    @Query("SELECT * FROM signals WHERE symbol = :sym ORDER BY timestamp DESC ALLOW FILTERING")
+    @Query("SELECT * FROM signals WHERE symbol = :sym ALLOW FILTERING")
     List<Signal> findByKeySymbol(@Param("sym") String sym);
 }
