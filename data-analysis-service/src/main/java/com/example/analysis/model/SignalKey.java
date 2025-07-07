@@ -1,4 +1,5 @@
-package com.example.storage.model;
+// SignalKey.java
+package com.example.analysis.model;
 
 import org.springframework.data.cassandra.core.cql.Ordering;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
@@ -8,7 +9,7 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import java.io.Serializable;
 
 @PrimaryKeyClass
-public class TradeKey implements Serializable {
+public class SignalKey implements Serializable {
     @PrimaryKeyColumn(name = "symbol",
             ordinal = 0,
             type = PrimaryKeyType.PARTITIONED)
@@ -20,22 +21,13 @@ public class TradeKey implements Serializable {
             ordering = Ordering.DESCENDING)
     private long timestamp;
 
-    public TradeKey() {}
-    public TradeKey(String symbol, long timestamp) {
-        this.symbol    = symbol;
-        this.timestamp = timestamp;
-    }
-    // getters & setters...
-    public long getTimestamp() {
-        return timestamp;
-    }
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-    public String getSymbol() {
-        return symbol;
-    }
-    public void setSymbol(String symbol) {
+    public SignalKey() {}
+    public SignalKey(String symbol, long timestamp) {
         this.symbol = symbol;
+        this.timestamp = timestamp;
     }
+    public String getSymbol()    { return symbol; }
+    public long   getTimestamp() { return timestamp; }
+    public void   setSymbol(String s)    { this.symbol = s; }
+    public void   setTimestamp(long t)   { this.timestamp = t; }
 }

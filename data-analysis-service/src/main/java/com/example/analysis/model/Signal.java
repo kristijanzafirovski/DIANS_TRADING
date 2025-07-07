@@ -1,77 +1,43 @@
 package com.example.analysis.model;
 
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
-
-import java.util.UUID;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 
 @Table("signals")
 public class Signal {
+
     @PrimaryKey
-    private UUID id;
-    private String symbol;
-    private long timestamp;
+    private SignalKey key;
+
+    @Column("shortMa")
     private double shortMa;
+
+    @Column("longMa")
     private double longMa;
-    private String signal;   // e.g. "BUY", "SELL", "HOLD"
+
+    @Column("signal")
+    private String signal;
 
     public Signal() {}
 
     public Signal(String symbol, long timestamp,
                   double shortMa, double longMa, String signal) {
-        this.id = UUID.randomUUID();
-        this.symbol = symbol;
-        this.timestamp = timestamp;
+        this.key     = new SignalKey(symbol, timestamp);
         this.shortMa = shortMa;
-        this.longMa = longMa;
-        this.signal = signal;
+        this.longMa  = longMa;
+        this.signal  = signal;
     }
 
-    public UUID getId() {
-        return id;
-    }
+    public SignalKey getKey()          { return key; }
+    public String    getSymbol()       { return key.getSymbol(); }
+    public long      getTimestamp()    { return key.getTimestamp(); }
+    public double    getShortMa()      { return shortMa; }
+    public double    getLongMa()       { return longMa; }
+    public String    getSignal()       { return signal; }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public double getShortMa() {
-        return shortMa;
-    }
-
-    public void setShortMa(double shortMa) {
-        this.shortMa = shortMa;
-    }
-
-    public double getLongMa() {
-        return longMa;
-    }
-
-    public void setLongMa(double longMa) {
-        this.longMa = longMa;
-    }
-
-    public String getSignal() {
-        return signal;
-    }
-
-    public void setSignal(String signal) {
-        this.signal = signal;
-    }
+    public void setKey(SignalKey key)         { this.key = key; }
+    public void setShortMa(double shortMa)    { this.shortMa = shortMa; }
+    public void setLongMa(double longMa)      { this.longMa  = longMa; }
+    public void setSignal(String signal)      { this.signal  = signal; }
 }

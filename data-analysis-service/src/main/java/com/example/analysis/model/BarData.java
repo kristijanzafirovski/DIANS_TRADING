@@ -1,12 +1,9 @@
 package com.example.analysis.model;
 
-public class Ohlc {
-    private double open;
-    private double high;
-    private double low;
-    private double close;
+public class BarData {
+    private double open, high, low, close;
     private long volume;
-    // getters & setters…
+    // getters / setters...
 
     public double getOpen() {
         return open;

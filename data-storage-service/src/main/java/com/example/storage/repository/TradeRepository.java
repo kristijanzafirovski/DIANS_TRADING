@@ -11,13 +11,9 @@ import java.util.List;
 
 @Repository
 public interface TradeRepository extends CassandraRepository<Trade, TradeKey> {
-
-    @Query("SELECT DISTINCT symbol FROM trades")
-    List<String> findDistinctSymbols();
-
-    @Query("SELECT COUNT(*) FROM trades WHERE symbol = ?0")
-    long countBySymbol(String symbol);
-
-    @Query("SELECT symbol FROM trades WHERE symbol = ?0")
     List<Trade> findBySymbol(String symbol);
+    boolean existsTradeBySymbol(String ticker);
+
+    List<Trade> findByKeySymbol(String symbol);
+    boolean    existsByKeySymbol(String symbol);
 }

@@ -12,6 +12,7 @@ public class SparkProcessingApp {
                 .appName("RealTimeProcessing")
                 .master("local[*]")
                 .getOrCreate();
+        spark.sparkContext().setLogLevel("ERROR");
 
         // 1) Ingest raw JSON strings from Kafka
         Dataset<String> rawJson = spark.readStream()
@@ -23,6 +24,21 @@ public class SparkProcessingApp {
                 .load()
                 .selectExpr("CAST(value AS STRING) as json_str")
                 .as(Encoders.STRING());
+
+        rawJson.writeStream().foreach(new ForeachWriter<String>() {
+            @Override
+            public boolean open(long partitionId, long epochId) {
+                return true;
+            }
+
+            public void process(String msg) {
+                System.out.println("raw kafka payload: " + msg);
+            }
+
+            @Override
+            public void close(Throwable errorOrNull) {}
+        });
+
 
         // 2) Parse into columns: symbol, timestamp, open,high,low,close,volume
         StructType schema = new StructType()
