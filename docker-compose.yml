@@ -82,6 +82,8 @@ services:
     build: 
         context: .
         dockerfile: real-time-processing-service/Dockerfile
+    ports:
+      - "4040:4040"
     depends_on:
       kafka:
         condition: service_healthy
@@ -100,7 +102,7 @@ services:
       context: data-visualization-service
       dockerfile: Dockerfile
     ports:
-      - "3100:80"
+      - "8080:80"
     depends_on:
       - data-analysis-service
       - data-storage-service

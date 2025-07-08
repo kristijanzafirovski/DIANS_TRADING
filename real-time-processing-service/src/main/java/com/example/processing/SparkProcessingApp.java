@@ -1,11 +1,13 @@
 package com.example.processing;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.streaming.StreamingQuery;
 import org.apache.spark.sql.types.StructType;
 
 import static org.apache.spark.sql.functions.*;
 
+@Slf4j
 public class SparkProcessingApp {
     public static void main(String[] args) throws Exception {
         SparkSession spark = SparkSession.builder()
@@ -32,7 +34,7 @@ public class SparkProcessingApp {
             }
 
             public void process(String msg) {
-                System.out.println("raw kafka payload: " + msg);
+                log.info("raw kafka payload: {}", msg);
             }
 
             @Override
